@@ -24,7 +24,7 @@ Each simulation run's data lives under `data/<model>/`, where `<model>` is the s
 
 ### Models
 
-The 28 models below are those used in [Kim, Ostriker & Fielding (2024)](https://arxiv.org/abs/2405.19227) and listed in Table 2 of that paper. `Sigma0` is the initial gas surface density [M☉/pc²]; `beta` is the initial plasma beta; `Z_gas` and `Z_dust` are gas- and dust-phase metallicities relative to solar.
+The 28 models below are those used in [Kim, Ostriker, et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024ApJ...972...67K/abstract) and listed in Table 2 of that paper. `Sigma0` is the initial gas surface density [M☉/pc²]; `beta` is the initial plasma beta; `Z_gas` and `Z_dust` are gas- and dust-phase metallicities relative to solar.
 
 | model | Sigma0 | beta | Z_gas | Z_dust |
 |-------|-------:|-----:|------:|-------:|
