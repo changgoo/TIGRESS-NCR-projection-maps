@@ -6,8 +6,8 @@ A curated copy of processed results from TIGRESS-NCR simulations, together with 
 
 ```
 .
-├── data/                   # Simulation data, organized by run basename
-│   └── _basename_/
+├── data/                   # Simulation data, organized by model name
+│   └── _model_/
 │       ├── prj/            # Projection maps
 │       ├── starpar/        # Star particle outputs
 │       ├── hst/            # History (time series) outputs
@@ -18,7 +18,42 @@ A curated copy of processed results from TIGRESS-NCR simulations, together with 
 
 ## Data
 
-Each simulation run's data lives under `data/_basename_/`, where `_basename_` is derived from the base directory path of the original simulation output. Each data directory contains a `README.md` with a summary of the copied files and the parsed runtime parameters (`athinput.runtime`).
+Each simulation run's data lives under `data/<model>/`, where `<model>` is the short model name (e.g. `R8-b1-Z1.0`). Each data directory contains a `README.md` with a summary of the copied files and the parsed runtime parameters (`athinput.runtime`).
+
+### Models
+
+The 28 models below are those used in [Kim, Ostriker & Fielding (2024)](https://arxiv.org/abs/2405.19227) and listed in Table 2 of that paper. `Sigma0` is the initial gas surface density [M☉/pc²]; `beta` is the initial plasma beta; `Z_gas` and `Z_dust` are gas- and dust-phase metallicities relative to solar.
+
+| model | Sigma0 | beta | Z_gas | Z_dust |
+|-------|-------:|-----:|------:|-------:|
+| S05-Z1.0 | 5 | 10 | 1.0 | 1.0 |
+| S05-Z0.1 | 5 | 10 | 0.1 | 0.1 |
+| R8-b1-Z3.0 | 12 | 1 | 3.0 | 3.0 |
+| R8-b1-Z1.0 | 12 | 1 | 1.0 | 1.0 |
+| R8-b1-Z0.3 | 12 | 1 | 0.3 | 0.3 |
+| R8-b1-Zg0.1Zd0.025 | 12 | 1 | 0.1 | 0.025 |
+| R8-b1-Z0.1 | 12 | 1 | 0.1 | 0.1 |
+| R8-b10-Z1.0 | 12 | 10 | 1.0 | 1.0 |
+| R8-b10-Z0.3 | 12 | 10 | 0.3 | 0.3 |
+| R8-b10-Zg0.1Zd0.025 | 12 | 10 | 0.1 | 0.025 |
+| R8-b10-Z0.1 | 12 | 10 | 0.1 | 0.1 |
+| S30-Z1.0 | 30 | 1 | 1.0 | 1.0 |
+| S30-Z0.1 | 30 | 1 | 0.1 | 0.1 |
+| LGR4-b1-Z3.0 | 50 | 1 | 3.0 | 3.0 |
+| LGR4-b1-Z1.0 | 50 | 1 | 1.0 | 1.0 |
+| LGR4-b1-Z0.3 | 50 | 1 | 0.3 | 0.3 |
+| LGR4-b1-Zg0.1Zd0.025 | 50 | 1 | 0.1 | 0.025 |
+| LGR4-b1-Z0.1 | 50 | 1 | 0.1 | 0.1 |
+| LGR4-b10-Z1.0 | 50 | 10 | 1.0 | 1.0 |
+| LGR4-b10-Z0.1 | 50 | 10 | 0.1 | 0.1 |
+| S100-Z1.0 | 100 | 1 | 1.0 | 1.0 |
+| S100-Z1.0r | 100 | 1 | 1.0 | 1.0 |
+| S100-Z0.1 | 100 | 1 | 0.1 | 0.1 |
+| S150-Om100q0-Z1.0 | 150 | 2 | 1.0 | 1.0 |
+| S150-Om200-Z1.0 | 150 | 2 | 1.0 | 1.0 |
+| S150-Om200-Z1.0r | 150 | 2 | 1.0 | 1.0 |
+| S150-Om100q0-Z0.1 | 150 | 2 | 0.1 | 0.1 |
+| S150-Om200-Z0.1 | 150 | 2 | 0.1 | 0.1 |
 
 ## Dependencies
 
