@@ -188,5 +188,38 @@ def main():
     print(f"{len(rows)} paper models")
 
 
+def lookup(basename, basedir=BASEDIR):
+    """Return the paper model name for a single basename, or None if not a paper model.
+
+    Applies the same filtering rules as main(): missing params, Z=0.01,
+    early evolution runs, and the SKIP list.
+    """
+    folders = sorted(
+        d for d in os.listdir(basedir)
+        if os.path.isdir(os.path.join(basedir, d))
+    )
+    early_runs = find_early_runs(folders)
+
+    params = parse_params(basename)
+    model_name, err = get_model_name(basename, params)
+
+    if err is not None:
+        return None
+    if params.get('Z_gas') == 0.01 or params.get('Z_dust') == 0.01:
+        return None
+    if basename in early_runs:
+        return None
+    if basename in SKIP:
+        return None
+    return model_name
+
+
 if __name__ == '__main__':
+    if len(sys.argv) == 3 and sys.argv[1] == '--lookup':
+        result = lookup(sys.argv[2])
+        if result:
+            print(result)
+            sys.exit(0)
+        else:
+            sys.exit(1)
     main()
