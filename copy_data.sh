@@ -29,8 +29,8 @@ FULL_DATA_URL="${2:-}"
 # fall back to basename with a warning.
 MODEL_NAME=$(python3 "${REPO_DIR}/map_model_names.py" --lookup "${BASENAME}" 2>/dev/null || true)
 if [[ -z "$MODEL_NAME" ]]; then
-    echo "Warning: '${BASENAME}' is not a recognised paper model; using basename as folder name." >&2
-    MODEL_NAME="${BASENAME}"
+    echo "Error: '${BASENAME}' is not a recognised paper model. Skipping." >&2
+    exit 1
 fi
 DEST="${REPO_DIR}/data/${MODEL_NAME}"
 
