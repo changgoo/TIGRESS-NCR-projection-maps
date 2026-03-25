@@ -167,8 +167,8 @@ def main():
             Z_dust=params.get('Z_dust', ''),
         ))
 
-    # Sort: ascending Sigma_0, then descending Z_gas
-    rows.sort(key=lambda r: (r['sigma0'], -r['Z_gas']))
+    # Sort: ascending Sigma_0, ascending beta, then descending Z_gas
+    rows.sort(key=lambda r: (r['sigma0'], r['beta'], -r['Z_gas']))
 
     # ── write markdown table ──────────────────────────────────────────────────
     outfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),

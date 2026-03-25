@@ -4,6 +4,24 @@ Entries are newest-first.
 
 ---
 
+## 2026-03-25 — Model name mapping (28 paper models)
+
+### Added
+- `map_model_names.py` — parses beta, Z_gas, Z_dust, and Sigma_0 from folder basenames using regex; replicates `LowZData.get_model_name()` without loading simulation data. Writes `model_name_mapping.md`.
+- `model_name_mapping.md` — basename → model name table for the 28 models in Table 2 of arXiv:2405.19227, sorted by ascending Sigma_0, ascending beta, then descending Z_gas.
+
+### Filtering logic (applied in order)
+1. Skip folders with missing beta or Z parameters
+2. Skip Z=0.01 runs (not in paper)
+3. Skip early evolution runs — non-`xy` folders that have an `xy` counterpart (iCR4↔iCR5 substitution also checked)
+4. Hardcoded skip list: two LGR4-b10 runs without `xy` counterpart, one `SBZ002_V00` variant
+
+### Sigma_0 assignment
+- Parsed from `_SXX` tag when present (S05=5, S30=30, S100=100, S150=150)
+- Defaults: R8 → 12, LGR4 → 50
+
+---
+
 ## 2026-03-25 — Reduce prj/ footprint and add original-vs-repo stats to README
 
 ### Changed
