@@ -55,16 +55,22 @@ for subdir in prj starpar hst; do
             # Copy all projection files (excluded from git via .gitignore)
             rsync -a --info=progress2 "${SRC}/" "${DEST}/${subdir}/"
         elif [[ "$subdir" == "hst" ]]; then
-            # Exclude reproducible pickle files and bulky phase/whole histories;
-            # keep only the main .hst and .sn files.
-            rsync -a --info=progress2 \
-                --exclude='*.p' \
-                --exclude='*.phase*.hst' \
-                --exclude='*.whole.hst' \
-                --include='*.hst' \
-                --include='*.sn' \
-                --exclude='*' \
-                "${SRC}/" "${DEST}/${subdir}/"
+            # Exclude reproducible pickle files and bulky phase/whole histories.
+            # .hst files are thinned by factor 10 (keep every 10th data row);
+            # .sn files are event-based and copied verbatim.
+            mkdir -p "${DEST}/${subdir}/"
+            for f in "${SRC}"/*.hst; do
+                [[ -f "$f" ]] || continue
+                fname="$(basename "$f")"
+                # skip phase and whole history files
+                [[ "$fname" == *.phase*.hst ]] && continue
+                [[ "$fname" == *.whole.hst  ]] && continue
+                awk 'NR<=3 || (NR-3)%10==1' "$f" > "${DEST}/${subdir}/${fname}"
+            done
+            for f in "${SRC}"/*.sn; do
+                [[ -f "$f" ]] || continue
+                cp "$f" "${DEST}/${subdir}/"
+            done
         else
             rsync -a --info=progress2 "${SRC}/" "${DEST}/${subdir}/"
         fi
@@ -111,8 +117,8 @@ README="${DEST}/README.md"
         if (( ORIG_FILES[$subdir] > 0 )); then
             case "$subdir" in
                 prj)     note="all snapshots"; ingit="—" ;;
-                hst)     note="\`.hst\` and \`.sn\` only"; ingit="✓" ;;
-                starpar) note="all files"; ingit="✓" ;;
+                hst)     note="\`.hst\` (thinned 10×) and \`.sn\`"; ingit="✓" ;;
+                starpar) note="all files"; ingit="—" ;;
             esac
             echo "| \`${subdir}/\` | ${ORIG_FILES[$subdir]} | $(numfmt --to=iec "${ORIG_SIZE[$subdir]}") | ${REPO_FILES[$subdir]} | $(numfmt --to=iec "${REPO_SIZE[$subdir]}") | ${ingit} | ${note} |"
         fi

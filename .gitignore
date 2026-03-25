@@ -1,2 +1,3 @@
-# Full projection data — too large for GitHub; stored locally only
+# Large data directories — too large for GitHub; stored locally only
 data/*/prj/
+data/*/starpar/

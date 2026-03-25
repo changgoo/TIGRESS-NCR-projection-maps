@@ -4,6 +4,26 @@ Entries are newest-first.
 
 ---
 
+## 2026-03-25 — Exclude starpar/ from git
+
+### Changed
+- `.gitignore`: added `data/*/starpar/` alongside `data/*/prj/`; only `hst/` (thinned `.hst` + `.sn`) is now git-tracked.
+- `update_data_readme.sh`: `starpar` no longer counted in Git total; column header updated to `starpar (local)`.
+- `copy_data.sh`: per-model README now marks `starpar/` as not in git (`—`).
+- `README.md`, `CLAUDE.md`: updated notes to reflect that both `prj/` and `starpar/` must be downloaded separately.
+- Result: git-tracked data reduced to **1.1 GB** (hst only, down from 3.0 GB).
+
+---
+
+## 2026-03-25 — Thin .hst files by factor 10 to fit GitHub limits
+
+### Changed
+- `copy_data.sh`: `hst/` copy no longer uses rsync; instead, `.hst` files are thinned by a factor of 10 with `awk 'NR<=3 || (NR-3)%10==1'` (preserves 3 header lines, keeps every 10th data row). `.sn` files are still copied verbatim (event-based, cannot thin). `phase*.hst` and `whole.hst` continue to be excluded.
+- All 28 existing `data/*/hst/*.hst` files re-processed in-place with the same awk rule.
+- Result: max `.hst` file 89 MB (under GitHub 100 MB hard limit); total git-tracked data 3.0 GB (down from ~5.5 GB).
+
+---
+
 ## 2026-03-25 — Finalize data layout and documentation
 
 ### Changed

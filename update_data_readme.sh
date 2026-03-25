@@ -45,11 +45,12 @@ for model_dir in "${DATA_DIR}"/*/; do
 done
 
 # ── Grand totals ──────────────────────────────────────────────────────────────
-GRAND_PRJ=0; GRAND_GIT=0; GRAND_LOCAL=0
+GRAND_PRJ=0; GRAND_STARPAR=0; GRAND_GIT=0; GRAND_LOCAL=0
 for model in "${MODELS[@]}"; do
-    git_bytes=$(( M_STARPAR_SIZE[$model] + M_HST_SIZE[$model] + M_OTHER_SIZE[$model] ))
-    local_bytes=$(( git_bytes + M_PRJ_SIZE[$model] ))
+    git_bytes=$(( M_HST_SIZE[$model] + M_OTHER_SIZE[$model] ))
+    local_bytes=$(( git_bytes + M_PRJ_SIZE[$model] + M_STARPAR_SIZE[$model] ))
     GRAND_PRJ=$(( GRAND_PRJ + M_PRJ_SIZE[$model] ))
+    GRAND_STARPAR=$(( GRAND_STARPAR + M_STARPAR_SIZE[$model] ))
     GRAND_GIT=$(( GRAND_GIT + git_bytes ))
     GRAND_LOCAL=$(( GRAND_LOCAL + local_bytes ))
 done
@@ -60,11 +61,11 @@ done
     echo ""
     echo "Generated: $(date -u '+%Y-%m-%d %H:%M UTC')"
     echo ""
-    echo "| Model | starpar | hst | prj (local) | Git total | Local total |"
-    echo "|-------|--------:|----:|------------:|----------:|------------:|"
+    echo "| Model | starpar (local) | hst | prj (local) | Git total | Local total |"
+    echo "|-------|----------------:|----:|------------:|----------:|------------:|"
     for model in "${MODELS[@]}"; do
-        git_bytes=$(( M_STARPAR_SIZE[$model] + M_HST_SIZE[$model] + M_OTHER_SIZE[$model] ))
-        local_bytes=$(( git_bytes + M_PRJ_SIZE[$model] ))
+        git_bytes=$(( M_HST_SIZE[$model] + M_OTHER_SIZE[$model] ))
+        local_bytes=$(( git_bytes + M_PRJ_SIZE[$model] + M_STARPAR_SIZE[$model] ))
         printf "| %-30s | %s (%d) | %s (%d) | %s (%d) | %s | %s |\n" \
             "$model" \
             "$(numfmt --to=iec "${M_STARPAR_SIZE[$model]}")" "${M_STARPAR_FILES[$model]}" \
@@ -73,7 +74,7 @@ done
             "$(numfmt --to=iec "$git_bytes")" \
             "$(numfmt --to=iec "$local_bytes")"
     done
-    echo "| **Total** | | | $(numfmt --to=iec "$GRAND_PRJ") | **$(numfmt --to=iec "$GRAND_GIT")** | $(numfmt --to=iec "$GRAND_LOCAL") |"
+    echo "| **Total** | $(numfmt --to=iec "$GRAND_STARPAR") | | $(numfmt --to=iec "$GRAND_PRJ") | **$(numfmt --to=iec "$GRAND_GIT")** | $(numfmt --to=iec "$GRAND_LOCAL") |"
 } > "$README"
 
 echo "Written to ${README}"
