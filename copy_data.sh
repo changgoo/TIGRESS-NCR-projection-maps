@@ -7,8 +7,8 @@
 # data/<basename>/ relative to this script's location, then writes
 # a summary README.md and extracts athinput.runtime.
 #
-# Subset rules (to keep repo size manageable):
-#   prj/    — only files whose index ends in 00 (every 100th snapshot)
+# Subset rules:
+#   prj/    — all files (large; excluded from git via .gitignore)
 #   hst/    — only *.hst and *.sn; excludes *.p, phase*.hst, whole.hst
 #   starpar/ — all files
 
@@ -52,11 +52,8 @@ for subdir in prj starpar hst; do
 
         echo "Copying ${subdir}/ ..."
         if [[ "$subdir" == "prj" ]]; then
-            # Keep only every-100th snapshot (index ending in 00)
-            rsync -a --info=progress2 \
-                --include='*00.p' \
-                --exclude='*' \
-                "${SRC}/" "${DEST}/${subdir}/"
+            # Copy all projection files (excluded from git via .gitignore)
+            rsync -a --info=progress2 "${SRC}/" "${DEST}/${subdir}/"
         elif [[ "$subdir" == "hst" ]]; then
             # Exclude reproducible pickle files and bulky phase/whole histories;
             # keep only the main .hst and .sn files.
