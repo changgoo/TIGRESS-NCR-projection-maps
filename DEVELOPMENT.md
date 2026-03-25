@@ -4,6 +4,16 @@ Entries are newest-first.
 
 ---
 
+## 2026-03-25 — Finalize data layout and documentation
+
+### Changed
+- `copy_data.sh`: destination folder is now the short paper model name (e.g. `R8-b1-Z1.0`) resolved via `map_model_names.py --lookup`; exits with error if the run is not a recognised paper model.
+- `copy_data.sh`: `prj/` is now copied in full (all snapshots); excluded from git via `.gitignore` (`data/*/prj/`).
+- `README.md`: added Models section with the 28-model table (Sigma_0, beta, Z_gas, Z_dust), paper reference (arXiv:2405.19227), and note that `prj/` must be downloaded separately.
+- `CLAUDE.md`: updated directory conventions and data copy script description to reflect model-name folders and `prj/` gitignore.
+
+---
+
 ## 2026-03-25 — Model name mapping (28 paper models)
 
 ### Added

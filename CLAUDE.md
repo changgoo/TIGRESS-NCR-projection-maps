@@ -6,8 +6,9 @@ This repository stores processed outputs from TIGRESS-NCR galaxy simulations and
 
 ## Directory Conventions
 
-- `data/_basename_/` — simulation data copied from original paths; `_basename_` is derived from the base simulation directory path.
+- `data/<model>/` — simulation data copied from original paths; `<model>` is the short paper model name (e.g. `R8-b1-Z1.0`) resolved by `map_model_names.py`. Only the 28 models from Table 2 of arXiv:2405.19227 are accepted; `copy_data.sh` exits with an error for anything else.
   - Subfolders: `prj/`, `starpar/`, `hst/`
+  - `prj/` contains the full projection data and is excluded from git via `.gitignore`
   - Each run directory contains `README.md` (data summary) and `athinput.runtime` (parsed runtime parameters)
 - `script/` — Python analysis scripts
 - `DEVELOPMENT.md` — development log, newest entries first
@@ -21,10 +22,10 @@ This repository stores processed outputs from TIGRESS-NCR galaxy simulations and
 
 ## Data Copy Script
 
-- Reads `out*.txt` files in the simulation directory.
-- Parses the block between `# --------------------- PAR_DUMP -----------------------` lines and saves it to `athinput.runtime`.
-- If multiple `out*.txt` files exist, use the latest one that contains the PAR_DUMP block.
-- Logs a summary (number of files, total size) to `data/_basename_/README.md`.
+- `copy_data.sh <base_dir>` — resolves the model name via `map_model_names.py --lookup`; exits with error if the run is not a paper model.
+- Copies all files in `prj/` (gitignored), `starpar/` (all), and `hst/` (`.hst` and `.sn` only).
+- Calls `extract_athinput.sh` to parse the PAR_DUMP block from the latest `out*.txt` and save it as `athinput.runtime`.
+- Logs original vs. repo file counts and sizes to `data/<model>/README.md`.
 
 ## Workflow Notes
 

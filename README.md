@@ -8,7 +8,7 @@ A curated copy of processed results from TIGRESS-NCR simulations, together with 
 .
 ├── data/                   # Simulation data, organized by model name
 │   └── _model_/
-│       ├── prj/            # Projection maps
+│       ├── prj/            # Projection maps (*not* in repo — download separately)
 │       ├── starpar/        # Star particle outputs
 │       ├── hst/            # History (time series) outputs
 │       └── README.md       # Data summary (file count, size, run metadata)
@@ -19,6 +19,8 @@ A curated copy of processed results from TIGRESS-NCR simulations, together with 
 ## Data
 
 Each simulation run's data lives under `data/<model>/`, where `<model>` is the short model name (e.g. `R8-b1-Z1.0`). Each data directory contains a `README.md` with a summary of the copied files and the parsed runtime parameters (`athinput.runtime`).
+
+> **Note:** The `prj/` subdirectories (projection maps) are **not included in this repository** due to their size. They must be downloaded separately — see each `data/<model>/README.md` for the full dataset location once available.
 
 ### Models
 
