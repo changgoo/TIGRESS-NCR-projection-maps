@@ -46,6 +46,22 @@ def parse_params(basename):
     return params
 
 
+def get_sigma0(basename):
+    """Return the initial gas surface density Sigma_0 [Msun/pc^2].
+
+    Explicit SXX tags take precedence; otherwise default by galaxy model:
+      R8   → 12,  LGR4 → 50  (LGR2/LGR8 always carry an explicit tag)
+    """
+    m = re.search(r'_S(\d+)', basename)
+    if m:
+        return int(m.group(1))
+    if basename.startswith('R8'):
+        return 12
+    if basename.startswith('LGR4'):
+        return 50
+    return None
+
+
 def get_model_name(basename, params):
     """Replicate LowZData.get_model_name() from parsed params.
 
@@ -90,6 +106,33 @@ def get_model_name(basename, params):
     return f'{head}-{ztail}', None
 
 
+# Folders explicitly excluded from the paper model list
+SKIP = {
+    'LGR4_4pc_NCR.full.b10.v3.iCR4.Zg0.1.Zd0.025',   # no xy counterpart
+    'LGR4_4pc_NCR.full.b10.v3.iCR4.Zg0.3.Zd0.3',      # no xy counterpart
+    'R8_8pc_NCR.full.b1.v3.iCR4.Zg0.1.Zd0.1.SBZ002_V00',  # variant run
+}
+
+
+def find_early_runs(folders):
+    """Return the set of folder names that are 'early' runs.
+
+    A folder is early if its name equals the prefix-before-.xy of some
+    other folder that contains 'xy', mirroring the _get_models logic.
+    The iCR4/iCR5 substitution is also checked (some early runs use iCR4
+    while the final run uses iCR5).
+    """
+    early = set()
+    for f in folders:
+        if 'xy' not in f:
+            continue
+        mearly = f[:f.rfind('xy') - 1]
+        for f2 in folders:
+            if f2 == mearly or f2 == mearly.replace('iCR5', 'iCR4'):
+                early.add(f2)
+    return early
+
+
 def main():
     basedir = sys.argv[1] if len(sys.argv) > 1 else BASEDIR
 
@@ -98,44 +141,51 @@ def main():
         if os.path.isdir(os.path.join(basedir, d))
     )
 
+    early_runs = find_early_runs(folders)
+
     rows = []
     for folder in folders:
         params = parse_params(folder)
         model_name, err = get_model_name(folder, params)
+
+        # Keep only paper models:
+        if err is not None:
+            continue                              # missing beta or Z info
+        if params.get('Z_gas') == 0.01 or params.get('Z_dust') == 0.01:
+            continue                              # Z=0.01 not in paper
+        if folder in early_runs:
+            continue                              # early evolution run
+        if folder in SKIP:
+            continue                              # manually excluded
+
         rows.append(dict(
             basename=folder,
-            model_name=model_name if model_name else f'[{err}]',
+            model_name=model_name,
+            sigma0=get_sigma0(folder),
             beta=params.get('beta', ''),
             Z_gas=params.get('Z_gas', ''),
             Z_dust=params.get('Z_dust', ''),
-            ok=err is None,
         ))
+
+    # Sort: ascending Sigma_0, then descending Z_gas
+    rows.sort(key=lambda r: (r['sigma0'], -r['Z_gas']))
 
     # ── write markdown table ──────────────────────────────────────────────────
     outfile = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            'model_name_mapping.md')
-    n_ok  = sum(r['ok'] for r in rows)
-    n_err = len(rows) - n_ok
-
     with open(outfile, 'w') as f:
         f.write('# Model Name Mapping\n\n')
-        f.write(f'Total: {len(rows)} folders &nbsp;|&nbsp; mapped: {n_ok} &nbsp;|&nbsp; errors: {n_err}\n\n')
-        f.write('| basename | model_name | beta | Z_gas | Z_dust |\n')
-        f.write('|----------|------------|-----:|------:|-------:|\n')
+        f.write(f'{len(rows)} paper models (excludes missing-parameter folders and Z=0.01 runs)\n\n')
+        f.write('| basename | model_name | Sigma0 | beta | Z_gas | Z_dust |\n')
+        f.write('|----------|------------|-------:|-----:|------:|-------:|\n')
         for r in rows:
-            flag = '' if r['ok'] else ' ⚠️'
             f.write(
-                f"| `{r['basename']}` | {r['model_name']}{flag} "
-                f"| {r['beta']} | {r['Z_gas']} | {r['Z_dust']} |\n"
+                f"| `{r['basename']}` | {r['model_name']} "
+                f"| {r['sigma0']} | {r['beta']} | {r['Z_gas']} | {r['Z_dust']} |\n"
             )
 
     print(f"Written to {outfile}")
-    print(f"Total: {len(rows)} folders  |  mapped: {n_ok}  |  errors: {n_err}")
-    if n_err:
-        print("\nCould not map:")
-        for r in rows:
-            if not r['ok']:
-                print(f"  {r['basename']:60s}  {r['model_name']}")
+    print(f"{len(rows)} paper models")
 
 
 if __name__ == '__main__':
