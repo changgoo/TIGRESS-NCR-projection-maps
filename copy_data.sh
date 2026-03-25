@@ -105,22 +105,22 @@ README="${DEST}/README.md"
     echo ""
     echo "## Contents"
     echo ""
-    echo "| Folder | Original files | Original size | Repo files | Repo size | Notes |"
-    echo "|--------|---------------:|--------------:|-----------:|----------:|-------|"
+    echo "| Folder | Source files | Source size | Local files | Local size | In git | Notes |"
+    echo "|--------|-------------:|------------:|------------:|-----------:|:------:|-------|"
     for subdir in prj starpar hst; do
         if (( ORIG_FILES[$subdir] > 0 )); then
             case "$subdir" in
-                prj)     note="every 100th snapshot (index ending in 00)" ;;
-                hst)     note="\`.hst\` and \`.sn\` only" ;;
-                starpar) note="all files" ;;
+                prj)     note="all snapshots"; ingit="—" ;;
+                hst)     note="\`.hst\` and \`.sn\` only"; ingit="✓" ;;
+                starpar) note="all files"; ingit="✓" ;;
             esac
-            echo "| \`${subdir}/\` | ${ORIG_FILES[$subdir]} | $(numfmt --to=iec "${ORIG_SIZE[$subdir]}") | ${REPO_FILES[$subdir]} | $(numfmt --to=iec "${REPO_SIZE[$subdir]}") | ${note} |"
+            echo "| \`${subdir}/\` | ${ORIG_FILES[$subdir]} | $(numfmt --to=iec "${ORIG_SIZE[$subdir]}") | ${REPO_FILES[$subdir]} | $(numfmt --to=iec "${REPO_SIZE[$subdir]}") | ${ingit} | ${note} |"
         fi
     done
     echo ""
-    echo "**Total (repo):** ${TOTAL_REPO_FILES} files, $(numfmt --to=iec "$TOTAL_REPO_BYTES")"
+    echo "**Total (local):** ${TOTAL_REPO_FILES} files, $(numfmt --to=iec "$TOTAL_REPO_BYTES")"
     echo ""
-    echo "**Total (original):** ${TOTAL_ORIG_FILES} files, $(numfmt --to=iec "$TOTAL_ORIG_BYTES")"
+    echo "**Total (source):** ${TOTAL_ORIG_FILES} files, $(numfmt --to=iec "$TOTAL_ORIG_BYTES")"
 } > "$README"
 
 echo "Summary written to: ${README}"
