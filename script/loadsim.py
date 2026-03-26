@@ -71,26 +71,29 @@ def load_data(s, num):
     s : pa.LoadSim
         Simulation object returned by :func:`load_sim`.
     num : int
-        Snapshot number to load.  Must be present in ``s.nums``; silently
-        ignored otherwise.
+        Snapshot number to load.  Must be present in ``s.nums``.
 
     Notes
     -----
     ``s.sp_src`` contains only active (non-zero mass) star particles younger
     than 20 Myr, which are the radiation/CR source particles in TIGRESS-NCR.
     """
-    if num in s.nums:
-        data_dir = s.basedir
-        # Projection maps stored as pickled dicts: keys are field names,
-        # values are 2-D arrays on the (x, y) plane.
-        s.prj = pd.read_pickle(os.path.join(data_dir, "prj", f"prj_{num:04d}.p"))
-        # Star-particle VTK file contains position, mass, age, etc.
-        s.sp = pa.read_starpar_vtk(
-            os.path.join(data_dir, "starpar", f"{s.problem_id}.{num:04d}.starpar.vtk")
+    if num not in s.nums:
+        raise ValueError(
+            f"Snapshot {num} is not available. "
+            f"Valid range: {s.nums[0]}–{s.nums[-1]}."
         )
-        # Restrict to active source particles: mass > 0 and age < 20 Myr.
-        s.sp_src = s.sp.where((s.sp.mage < 20) & (s.sp.mass > 0)).dropna()
-        s.time = s.sp.time
+    data_dir = s.basedir
+    # Projection maps stored as pickled dicts: keys are field names,
+    # values are 2-D arrays on the (x, y) plane.
+    s.prj = pd.read_pickle(os.path.join(data_dir, "prj", f"prj_{num:04d}.p"))
+    # Star-particle VTK file contains position, mass, age, etc.
+    s.sp = pa.read_starpar_vtk(
+        os.path.join(data_dir, "starpar", f"{s.problem_id}.{num:04d}.starpar.vtk")
+    )
+    # Restrict to active source particles: mass > 0 and age < 20 Myr.
+    s.sp_src = s.sp.where((s.sp.mage < 20) & (s.sp.mass > 0)).dropna()
+    s.time = s.sp.time
 
 
 def prj_to_xarray(s, expand_domain=False):
