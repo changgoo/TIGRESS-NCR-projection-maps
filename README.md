@@ -12,6 +12,7 @@ A curated copy of processed results from TIGRESS-NCR simulations, together with 
 │       ├── starpar/        # Star particle outputs (*not* in repo — download separately)
 │       ├── hst/            # History (time series) outputs
 │       └── README.md       # Data summary (file count, size, run metadata)
+├── notebook/               # Example Jupyter notebooks
 ├── script/                 # Python analysis scripts
 └── DEVELOPMENT.md          # Development log (latest to first)
 ```
@@ -75,11 +76,27 @@ pip install -e .
 
 ## Scripts
 
-See `script/` for analysis scripts. Each script has a corresponding test. Run tests with:
+`script/loadsim.py` provides the core data-loading utilities:
+
+| Function | Description |
+|---|---|
+| `load_sim(model)` | Initialise a simulation object and discover available snapshots |
+| `load_data(s, num)` | Load a single snapshot (projection maps + star-particle catalogue) |
+| `prj_to_xarray(s, expand_domain=False)` | Convert projection maps to a labelled `xarray.Dataset` |
+| `get_cutout(data, sp, dx=64)` | Extract a square cutout (±`dx` pc) centred on a star particle |
+
+Each script has a corresponding test. Run tests with:
 
 ```bash
 pytest script/
 ```
+
+## Example Notebooks
+
+| Notebook | Description |
+|---|---|
+| `notebook/example1_read_plot_prj.ipynb` | Load a snapshot; plot EM and Σ_gas maps with star-particle overlays; inspect SFR history and supernova log |
+| `notebook/example2_xarray_shear_periodic_cutouts.ipynb` | Convert projections to xarray; tile with shear-periodic BCs; extract per-cluster cutout time-series |
 
 ## Development
 
