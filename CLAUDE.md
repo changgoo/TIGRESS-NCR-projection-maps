@@ -25,13 +25,15 @@ This repository stores processed outputs from TIGRESS-NCR galaxy simulations and
 ## Data Scripts (in `test/`)
 
 - `copy_data.sh <base_dir>` — resolves the model name via `map_model_names.py --lookup`; exits with error if the run is not a recognised model.
-  - Copies all files in `prj/` and `starpar/`, and thinned `.hst` + verbatim `.sn` from `hst/`.
+  - Copies all files in `prj/`; copies `starpar/` excluding `*.p`; copies thinned `.hst` + verbatim `.sn` from `hst/`.
   - Calls `extract_athinput.sh` to parse the PAR_DUMP block from the latest `out*.txt` and save it as `athinput.runtime`.
   - Logs original vs. repo file counts and sizes to `data/<model>/README.md`.
-- `sync_data.sh [extra rsync flags]` — rsyncs `data/` to `/tigerdata/EOSTRIKE/TIGRESS-NCR/TIGRESS-NCR-projection-maps/data/`.
+- `sync_data.sh [extra rsync flags]` — rsyncs `data/` and `DATA_SUMMARY.md` to `/tigerdata/EOSTRIKE/TIGRESS-NCR/TIGRESS-NCR-projection-maps/`.
   - Excludes `*.p` files outside `prj/` and deletes them at the destination.
   - Uses `--whole-file --inplace` required by the tigerdata storage backend.
   - Pass `--dry-run` to preview without transferring.
+- `update_data_readme.sh` — regenerates `DATA_SUMMARY.md` at the repo root with current local file counts and sizes.
+- `test_data_sanity.py` — pytest checks for every model in `data/`: `athinput.runtime` non-empty, `hst/*.hst` and `hst/*.sn` present, `prj/*.p` readable with expected keys and `Sigma_gas`, `starpar/*.vtk` present (skipped when only pre-pickled vtk available).
 
 ## Workflow Notes
 

@@ -4,6 +4,20 @@ Entries are newest-first.
 
 ---
 
+## 2026-03-27 — Exclude starpar/*.p; add data sanity tests; sync DATA_SUMMARY.md
+
+### Changed
+- `copy_data.sh`: starpar rsync now uses `--exclude='*.p'`; only `prj/` retains pickle files.
+  Deleted 3,785 pre-existing `.p` files from all models' `starpar/`.
+- `sync_data.sh`: now also rsyncs `DATA_SUMMARY.md` to the archive root alongside `data/`.
+- `update_data_readme.sh`: output moved from `data/README.md` to `DATA_SUMMARY.md` at repo root,
+  keeping the summary git-tracked outside the gitignored `data/` directory.
+- `test/test_data_sanity.py`: new pytest file — per-model checks for `athinput.runtime`,
+  `hst/*.hst`, `hst/*.sn`, `prj/*.p` (readable, expected keys + `Sigma_gas`), and `starpar/*.vtk`.
+  243 tests pass across all 30 models.
+
+---
+
 ## 2026-03-27 — Move copy-related scripts to test/; script/ now analysis-only
 
 ### Changed
