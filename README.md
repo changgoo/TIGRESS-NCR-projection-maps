@@ -116,6 +116,40 @@ pytest test/
 | `notebook/example1_read_plot_prj.ipynb` | Load a snapshot; plot EM and Σ_gas maps with star-particle overlays; inspect SFR history and supernova log |
 | `notebook/example2_xarray_shear_periodic_cutouts.ipynb` | Convert projections to xarray; tile with shear-periodic BCs; extract per-cluster cutout time-series |
 
-## Development
+## Attribution
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for a log of major changes.
+If you use this data or scripts, please cite the relevant papers:
+
+```bibtex
+@ARTICLE{2024ApJ...972...67K,
+  author = {{Kim}, Chang-Goo and {Ostriker}, Eve C. and {Kim}, Jeong-Gyu and {Gong}, Munan and {Bryan}, Greg L. and {Fielding}, Drummond B. and {Hassan}, Sultan and {Ho}, Matthew and {Jeffreson}, Sarah M.~R. and {Somerville}, Rachel S. and {Steinwandel}, Ulrich P.},
+  title = "{Metallicity Dependence of Pressure-regulated Feedback-modulated Star Formation in the TIGRESS-NCR Simulation Suite}",
+  journal = {\apj},
+  year = 2024,
+  month = sep,
+  volume = {972},
+  number = {1},
+  eid = {67},
+  pages = {67},
+  doi = {10.3847/1538-4357/ad59ab},
+  archivePrefix = {arXiv},
+  eprint = {2405.19227},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2024ApJ...972...67K},
+}
+
+@ARTICLE{2023ApJ...946....3K,
+  author = {{Kim}, Chang-Goo and {Kim}, Jeong-Gyu and {Gong}, Munan and {Ostriker}, Eve C.},
+  title = "{Introducing TIGRESS-NCR. I. Coregulation of the Multiphase Interstellar Medium and Star Formation Rates}",
+  journal = {\apj},
+  year = 2023,
+  month = mar,
+  volume = {946},
+  number = {1},
+  eid = {3},
+  pages = {3},
+  doi = {10.3847/1538-4357/acbd3a},
+  archivePrefix = {arXiv},
+  eprint = {2211.13293},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2023ApJ...946....3K},
+}
+```
