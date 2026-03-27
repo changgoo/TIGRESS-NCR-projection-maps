@@ -14,7 +14,8 @@
 
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
 if [[ $# -lt 1 ]]; then
     echo "Usage: $0 <base_dir> [full_data_url]" >&2
@@ -27,7 +28,7 @@ FULL_DATA_URL="${2:-}"
 
 # Resolve destination folder name: use paper model name when available,
 # fall back to basename with a warning.
-MODEL_NAME=$(python3 "${REPO_DIR}/map_model_names.py" --lookup "${BASENAME}" 2>/dev/null || true)
+MODEL_NAME=$(python3 "${SCRIPT_DIR}/map_model_names.py" --lookup "${BASENAME}" 2>/dev/null || true)
 if [[ -z "$MODEL_NAME" ]]; then
     echo "Error: '${BASENAME}' is not a recognised paper model. Skipping." >&2
     exit 1
@@ -135,7 +136,7 @@ echo "Orig total : ${TOTAL_ORIG_FILES} files, $(numfmt --to=iec "$TOTAL_ORIG_BYT
 echo ""
 
 # ── Extract athinput.runtime ──────────────────────────────────────────────────
-"${REPO_DIR}/extract_athinput.sh" "${BASE_DIR}" "${DEST}"
+"${SCRIPT_DIR}/extract_athinput.sh" "${BASE_DIR}" "${DEST}"
 
 # ── Regenerate data/README.md ─────────────────────────────────────────────────
-"${REPO_DIR}/update_data_readme.sh"
+"${SCRIPT_DIR}/update_data_readme.sh"

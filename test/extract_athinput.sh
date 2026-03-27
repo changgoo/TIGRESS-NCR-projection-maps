@@ -13,7 +13,8 @@
 
 set -euo pipefail
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
 if [[ $# -lt 1 ]]; then
     echo "Usage: $0 <base_dir> [dest_dir]" >&2

@@ -106,6 +106,13 @@ def get_model_name(basename, params):
     return f'{head}-{ztail}', None
 
 
+# Higher-resolution models from Kim et al. (2023, ApJ 946 3) that do not
+# follow the standard beta/Z naming convention and must be mapped explicitly.
+EXTRA_MODELS = {
+    'R8_4pc_NCR.full.xy2048.eps0.np768.has': 'R8-4pc',
+    'LGR4_2pc_NCR.full.xy1024.eps1.e-8.np768': 'LGR4-2pc',
+}
+
 # Folders explicitly excluded from the paper model list
 SKIP = {
     'LGR4_4pc_NCR.full.b10.v3.iCR4.Zg0.1.Zd0.025',   # no xy counterpart
@@ -192,8 +199,11 @@ def lookup(basename, basedir=BASEDIR):
     """Return the paper model name for a single basename, or None if not a paper model.
 
     Applies the same filtering rules as main(): missing params, Z=0.01,
-    early evolution runs, and the SKIP list.
+    early evolution runs, and the SKIP list.  EXTRA_MODELS are checked first.
     """
+    if basename in EXTRA_MODELS:
+        return EXTRA_MODELS[basename]
+
     folders = sorted(
         d for d in os.listdir(basedir)
         if os.path.isdir(os.path.join(basedir, d))
