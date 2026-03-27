@@ -33,7 +33,9 @@ https://tigress-web.princeton.edu/~changgoo/TIGRESS-NCR-projection-maps/
 
 Download the `R8-b1-Z1.0/` directory and place it at `data/R8-b1-Z1.0/`.
 
-**Full dataset** — all 30 models will be released via Globus (coming soon).
+**Full dataset** — all 30 models are available via Globus:
+
+[https://app.globus.org/file-manager?origin_id=c8c05e29-1b01-4416-aaa1-f90a31f3e462&origin_path=%2F](https://app.globus.org/file-manager?origin_id=c8c05e29-1b01-4416-aaa1-f90a31f3e462&origin_path=%2F)
 
 A file count and size summary across all locally available models is in [`DATA_SUMMARY.md`](DATA_SUMMARY.md).
 
