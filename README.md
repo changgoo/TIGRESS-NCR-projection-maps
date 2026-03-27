@@ -6,26 +6,40 @@ A curated copy of processed results from TIGRESS-NCR simulations, together with 
 
 ```
 .
-├── data/                   # Simulation data, organized by model name
-│   └── _model_/
-│       ├── prj/            # Projection maps (*not* in repo — download separately)
-│       ├── starpar/        # Star particle outputs (*not* in repo — download separately)
+├── data/                   # Simulation data (not in repo — download separately)
+│   └── <model>/
+│       ├── prj/            # Projection maps (pickle files)
+│       ├── starpar/        # Star particle VTK outputs
 │       ├── hst/            # History (time series) outputs
 │       └── README.md       # Data summary (file count, size, run metadata)
+├── DATA_SUMMARY.md         # File count and size summary across all models
 ├── notebook/               # Example Jupyter notebooks
 ├── script/                 # Python analysis scripts
+├── test/                   # Tests and data-management utilities
 └── DEVELOPMENT.md          # Development log (latest to first)
 ```
 
 ## Data
 
-Each simulation run's data lives under `data/<model>/`, where `<model>` is the short model name (e.g. `R8-b1-Z1.0`). Each data directory contains a `README.md` with a summary of the copied files and the parsed runtime parameters (`athinput.runtime`).
+The `data/` directory is **not included in this repository**. To use the scripts and notebooks, download the data and place it under `data/<model>/` where `<model>` is the short model name (e.g. `R8-b1-Z1.0`).
 
-> **Note:** The `prj/` (projection maps) and `starpar/` (star particle outputs) subdirectories are **not included in this repository** due to their size. They must be downloaded separately — see each `data/<model>/README.md` for the full dataset location once available.
+### Downloading
+
+**Example model (`R8-b1-Z1.0`)** — used in the example notebooks — is available at:
+
+```
+https://tigress-web.princeton.edu/~changgoo/TIGRESS-NCR-projection-maps/
+```
+
+Download the `R8-b1-Z1.0/` directory and place it at `data/R8-b1-Z1.0/`.
+
+**Full dataset** — all 30 models will be released via Globus (coming soon).
+
+A file count and size summary across all locally available models is in [`DATA_SUMMARY.md`](DATA_SUMMARY.md).
 
 ### Models
 
-The 28 models below are those used in [Kim, Ostriker, et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024ApJ...972...67K/abstract) and listed in Table 2 of that paper. `Sigma0` is the initial gas surface density [M☉/pc²]; `beta` is the initial plasma beta; `Z_gas` and `Z_dust` are gas- and dust-phase metallicities relative to solar.
+The 28 models below are from [Kim, Ostriker, et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024ApJ...972...67K/abstract) (Table 2). Two additional high-resolution models (`R8-4pc`, `LGR4-2pc`) are from [Kim et al. (2023)](https://ui.adsabs.harvard.edu/abs/2023ApJ...946....3K/abstract). `Sigma0` is the initial gas surface density [M☉/pc²]; `beta` is the initial plasma beta; `Z_gas` and `Z_dust` are gas- and dust-phase metallicities relative to solar.
 
 | model | Sigma0 | beta | Z_gas | Z_dust |
 |-------|-------:|-----:|------:|-------:|
@@ -57,6 +71,10 @@ The 28 models below are those used in [Kim, Ostriker, et al. (2024)](https://ui.
 | S150-Om200-Z1.0r | 150 | 2 | 1.0 | 1.0 |
 | S150-Om100q0-Z0.1 | 150 | 2 | 0.1 | 0.1 |
 | S150-Om200-Z0.1 | 150 | 2 | 0.1 | 0.1 |
+| R8-4pc (\*) | 12 | 1 | 1.0 | 1.0 |
+| LGR4-2pc (\*) | 50 | 1 | 1.0 | 1.0 |
+
+(\*) High-resolution models from [Kim et al. (2023)](https://ui.adsabs.harvard.edu/abs/2023ApJ...946....3K/abstract).
 
 ## Dependencies
 
@@ -88,7 +106,7 @@ pip install -e .
 Each script has a corresponding test. Run tests with:
 
 ```bash
-pytest script/
+pytest test/
 ```
 
 ## Example Notebooks
