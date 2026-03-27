@@ -4,6 +4,42 @@ Entries are newest-first.
 
 ---
 
+## 2026-03-27 — Move copy-related scripts to test/; script/ now analysis-only
+
+### Changed
+- `script/` now contains only `loadsim.py` (data analysis).
+- `copy_data.sh`, `extract_athinput.sh`, `update_data_readme.sh`, `map_model_names.py`,
+  and `model_name_mapping.md` moved from `script/` to `test/`.
+- `test/conftest.py`: updated sys.path to add `test/` (was `script/`).
+
+---
+
+## 2026-03-27 — Reorganise repo: move scripts to script/, tests to test/
+
+### Changed
+- Moved `copy_data.sh`, `extract_athinput.sh`, `update_data_readme.sh`, `map_model_names.py`,
+  and `model_name_mapping.md` from the repo root into `script/`.
+- Moved `test_map_model_names.py` into `test/`; added `test/conftest.py` to put `script/` on sys.path.
+- Updated `REPO_DIR` logic in all three shell scripts: each now sets `SCRIPT_DIR` to the script's
+  own directory and `REPO_DIR` to its parent (the repo root), so `data/` references remain correct.
+- `copy_data.sh` now resolves sibling scripts via `${SCRIPT_DIR}` instead of `${REPO_DIR}`.
+
+---
+
+## 2026-03-27 — Add high-resolution models R8-4pc and LGR4-2pc
+
+### Changed
+- `map_model_names.py`: added `EXTRA_MODELS` dict mapping two higher-resolution run basenames
+  (`R8_4pc_NCR.full.xy2048.eps0.np768.has` → `R8-4pc`,
+   `LGR4_2pc_NCR.full.xy1024.eps1.e-8.np768` → `LGR4-2pc`) from
+  Kim et al. (2023, ApJ 946 3).  `lookup()` checks this dict before any
+  directory listing, so these models pass through `copy_data.sh` without
+  needing the standard beta/Z naming convention.
+- `test_map_model_names.py`: new pytest file covering `parse_params`, `get_model_name`,
+  `EXTRA_MODELS`, and `lookup` (12 tests, all pass).
+
+---
+
 ## 2026-03-25 — Exclude starpar/ from git
 
 ### Changed
