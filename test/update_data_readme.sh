@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# update_data_readme.sh — Regenerate data/README.md with a per-model size summary.
+# update_data_readme.sh — Regenerate DATA_SUMMARY.md with a per-model size summary.
 #
 # Usage: ./update_data_readme.sh
 #
 # Scans every subdirectory under data/, computes file counts and sizes for
-# prj/, starpar/, and hst/, and writes a summary table to data/README.md.
+# prj/, starpar/, and hst/, and writes a summary table to DATA_SUMMARY.md.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 DATA_DIR="${REPO_DIR}/data"
-README="${DATA_DIR}/README.md"
+README="${REPO_DIR}/DATA_SUMMARY.md"
 
 # ── Collect per-model stats ───────────────────────────────────────────────────
 declare -a MODELS

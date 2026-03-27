@@ -138,5 +138,5 @@ echo ""
 # ── Extract athinput.runtime ──────────────────────────────────────────────────
 "${SCRIPT_DIR}/extract_athinput.sh" "${BASE_DIR}" "${DEST}"
 
-# ── Regenerate data/README.md ─────────────────────────────────────────────────
+# ── Regenerate DATA_SUMMARY.md ───────────────────────────────────────────────
 "${SCRIPT_DIR}/update_data_readme.sh"
