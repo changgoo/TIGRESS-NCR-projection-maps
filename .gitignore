@@ -1,2 +1,9 @@
 # Data directory — stored locally only, not tracked in git
 data/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Scratch/temporary files
+prompt.txt
