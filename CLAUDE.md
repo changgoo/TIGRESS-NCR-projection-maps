@@ -6,11 +6,12 @@ This repository stores processed outputs from TIGRESS-NCR galaxy simulations and
 
 ## Directory Conventions
 
-- `data/<model>/` — simulation data copied from original paths; `<model>` is the short paper model name (e.g. `R8-b1-Z1.0`) resolved by `map_model_names.py`. Only the 28 models from Table 2 of arXiv:2405.19227 are accepted; `copy_data.sh` exits with an error for anything else.
+- `data/<model>/` — simulation data copied from original paths; `<model>` is the short paper model name (e.g. `R8-b1-Z1.0`) resolved by `test/map_model_names.py`. The 28 models from Table 2 of arXiv:2405.19227 plus two high-resolution models (`R8-4pc`, `LGR4-2pc` from 2023ApJ...946....3K) are accepted; `copy_data.sh` exits with an error for anything else.
   - Subfolders: `prj/`, `starpar/`, `hst/`
-  - `prj/` and `starpar/` are excluded from git via `.gitignore` (too large)
+  - All of `data/` is excluded from git via `.gitignore`
   - Each run directory contains `README.md` (data summary) and `athinput.runtime` (parsed runtime parameters)
-- `script/` — Python analysis scripts
+- `script/` — Python analysis scripts only (e.g. `loadsim.py`)
+- `test/` — pytest tests and data-management utilities (`copy_data.sh`, `extract_athinput.sh`, `update_data_readme.sh`, `map_model_names.py`, `sync_data.sh`)
 - `DEVELOPMENT.md` — development log, newest entries first
 
 ## Coding Conventions
@@ -18,14 +19,19 @@ This repository stores processed outputs from TIGRESS-NCR galaxy simulations and
 - **Language:** Python for analysis scripts; shell (bash/awk/sed) for data-management utilities.
 - **Dependencies:** [pyathena](https://github.com/jeonggyukim/pyathena) is the primary analysis library.
 - **Tests:** Every script must have a corresponding test. Use `pytest`.
+- **Running tests:** `module load anaconda3/2024.6 && conda run -n pyathena python -m pytest test/`
 - **Documentation:** Update `DEVELOPMENT.md` (latest-to-first) after each major milestone.
 
-## Data Copy Script
+## Data Scripts (in `test/`)
 
-- `copy_data.sh <base_dir>` — resolves the model name via `map_model_names.py --lookup`; exits with error if the run is not a paper model.
-- Copies all files in `prj/` (gitignored), `starpar/` (gitignored), and `hst/` (`.hst` thinned 10×, `.sn` verbatim; gittracked).
-- Calls `extract_athinput.sh` to parse the PAR_DUMP block from the latest `out*.txt` and save it as `athinput.runtime`.
-- Logs original vs. repo file counts and sizes to `data/<model>/README.md`.
+- `copy_data.sh <base_dir>` — resolves the model name via `map_model_names.py --lookup`; exits with error if the run is not a recognised model.
+  - Copies all files in `prj/` and `starpar/`, and thinned `.hst` + verbatim `.sn` from `hst/`.
+  - Calls `extract_athinput.sh` to parse the PAR_DUMP block from the latest `out*.txt` and save it as `athinput.runtime`.
+  - Logs original vs. repo file counts and sizes to `data/<model>/README.md`.
+- `sync_data.sh [extra rsync flags]` — rsyncs `data/` to `/tigerdata/EOSTRIKE/TIGRESS-NCR/TIGRESS-NCR-projection-maps/data/`.
+  - Excludes `*.p` files outside `prj/` and deletes them at the destination.
+  - Uses `--whole-file --inplace` required by the tigerdata storage backend.
+  - Pass `--dry-run` to preview without transferring.
 
 ## Workflow Notes
 
