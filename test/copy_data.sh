@@ -73,7 +73,8 @@ for subdir in prj starpar hst; do
                 cp "$f" "${DEST}/${subdir}/"
             done
         else
-            rsync -a --info=progress2 "${SRC}/" "${DEST}/${subdir}/"
+            # Exclude pickle files from starpar (only prj/ keeps .p files)
+            rsync -a --info=progress2 --exclude='*.p' "${SRC}/" "${DEST}/${subdir}/"
         fi
 
         REPO_FILES[$subdir]=$(find "${DEST}/${subdir}" -type f | wc -l)
@@ -119,7 +120,7 @@ README="${DEST}/README.md"
             case "$subdir" in
                 prj)     note="all snapshots"; ingit="—" ;;
                 hst)     note="\`.hst\` (thinned 10×) and \`.sn\`"; ingit="✓" ;;
-                starpar) note="all files"; ingit="—" ;;
+                starpar) note="all files except \`.p\`"; ingit="—" ;;
             esac
             echo "| \`${subdir}/\` | ${ORIG_FILES[$subdir]} | $(numfmt --to=iec "${ORIG_SIZE[$subdir]}") | ${REPO_FILES[$subdir]} | $(numfmt --to=iec "${REPO_SIZE[$subdir]}") | ${ingit} | ${note} |"
         fi
